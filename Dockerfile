@@ -1,8 +1,7 @@
 FROM python:3.11-slim
 
-# Install system dependencies including FFmpeg for audio processing
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    ffmpeg \
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
@@ -14,9 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
-
-# Create upload directory
-RUN mkdir -p /app/uploads
 
 EXPOSE 8000
 

@@ -22,8 +22,8 @@ class SourceContent(Base):
     description = Column(Text, nullable=True)
     duration = Column(Integer, nullable=True)  # in seconds
     
-    # Audio and transcript
-    audio_path = Column(String, nullable=True)
+    # Transcript
+    # audio_path = Column(String, nullable=True)  # Legacy: no longer needed with YouTube transcript API
     transcript = Column(Text, nullable=True)
     
     # Embeddings for semantic search

@@ -18,8 +18,8 @@ A fully automated system that transforms YouTube videos into platform-specific s
 ### Components
 
 1. **Ingestion Layer** - FastAPI webhooks + Celery workers
-   - YouTube video download (yt-dlp)
-   - Audio transcription (Whisper/Deepgram)
+   - YouTube video metadata extraction (yt-dlp)
+   - Transcript fetching from YouTube
    - Metadata extraction
 
 2. **AI Logic Layer** - LangGraph State Machine
@@ -46,7 +46,6 @@ A fully automated system that transforms YouTube videos into platform-specific s
 - Docker and Docker Compose
 - API Keys:
   - Anthropic (Claude)
-  - OpenAI or Deepgram (transcription)
   - Twitter, LinkedIn, Instagram
   - Resend or SendGrid (email)
 
@@ -145,7 +144,6 @@ Key configurations in `.env`:
 ```bash
 # AI
 ANTHROPIC_API_KEY=your_key
-TRANSCRIPTION_PROVIDER=whisper  # or deepgram
 
 # Features
 ENABLE_AUTO_PUBLISH=false  # Require approval

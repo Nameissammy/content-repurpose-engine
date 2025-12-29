@@ -1,4 +1,4 @@
-from anthropic import Anthropic
+from openai import OpenAI
 from app.config import settings
 from app.ai.prompts import TWITTER_GENERATOR_PROMPT
 import structlog
@@ -12,7 +12,7 @@ def generate_twitter_thread(context_analysis: str, style_guide: str) -> dict:
     Generate Twitter/X thread from analyzed content.
     Uses Claude 3.5 Sonnet to create engaging, viral-style tweets.
     """
-    client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    client = OpenAI(api_key=settings.OPENAI_API_KEY)
     
     prompt = TWITTER_GENERATOR_PROMPT.format(
         context_analysis=context_analysis,
@@ -22,8 +22,8 @@ def generate_twitter_thread(context_analysis: str, style_guide: str) -> dict:
     try:
         logger.info("generating_twitter_thread")
         
-        response = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+        response = client.chat.completions.create(
+            model="gpt-4o",
             max_tokens=2500,
             temperature=0.7,  # Higher temperature for creative content
             messages=[
@@ -31,7 +31,7 @@ def generate_twitter_thread(context_analysis: str, style_guide: str) -> dict:
             ]
         )
         
-        thread_text = response.content[0].text
+        thread_text = response.choices[0].message.content
         
         # Parse tweets from the response
         tweets = [

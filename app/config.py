@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "info"
     
     # AI/LLM
-    ANTHROPIC_API_KEY: str
+    OPENAI_API_KEY: str
     
     # Twitter/X
     TWITTER_API_KEY: Optional[str] = None

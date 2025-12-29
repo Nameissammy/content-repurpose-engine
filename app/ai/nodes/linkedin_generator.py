@@ -1,4 +1,4 @@
-from anthropic import Anthropic
+from openai import OpenAI
 from app.config import settings
 from app.ai.prompts import LINKEDIN_GENERATOR_PROMPT
 import structlog
@@ -11,7 +11,7 @@ def generate_linkedin_post(context_analysis: str, style_guide: str) -> dict:
     Generate LinkedIn post from analyzed content.
     Creates professional, storytelling-style posts optimized for LinkedIn engagement.
     """
-    client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    client = OpenAI(api_key=settings.OPENAI_API_KEY)
     
     prompt = LINKEDIN_GENERATOR_PROMPT.format(
         context_analysis=context_analysis,
@@ -21,8 +21,8 @@ def generate_linkedin_post(context_analysis: str, style_guide: str) -> dict:
     try:
         logger.info("generating_linkedin_post")
         
-        response = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+        response = client.chat.completions.create(
+            model="gpt-4o",
             max_tokens=3000,
             temperature=0.7,
             messages=[
@@ -30,7 +30,7 @@ def generate_linkedin_post(context_analysis: str, style_guide: str) -> dict:
             ]
         )
         
-        post_content = response.content[0].text.strip()
+        post_content = response.choices[0].message.content.strip()
         
         # Extract hashtags if they're at the end
         lines = post_content.split('\n')

@@ -1,4 +1,4 @@
-from anthropic import Anthropic
+from openai import OpenAI
 from app.config import settings
 from app.ai.prompts import NEWSLETTER_GENERATOR_PROMPT
 import structlog
@@ -11,7 +11,7 @@ def generate_newsletter(context_analysis: str, style_guide: str) -> dict:
     Generate newsletter/email content from analyzed content.
     Creates educational, well-structured email content with subject line.
     """
-    client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    client = OpenAI(api_key=settings.OPENAI_API_KEY)
     
     prompt = NEWSLETTER_GENERATOR_PROMPT.format(
         context_analysis=context_analysis,
@@ -21,8 +21,8 @@ def generate_newsletter(context_analysis: str, style_guide: str) -> dict:
     try:
         logger.info("generating_newsletter")
         
-        response = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+        response = client.chat.completions.create(
+            model="gpt-4o",
             max_tokens=3500,
             temperature=0.7,
             messages=[
@@ -30,7 +30,7 @@ def generate_newsletter(context_analysis: str, style_guide: str) -> dict:
             ]
         )
         
-        newsletter_content = response.content[0].text.strip()
+        newsletter_content = response.choices[0].message.content.strip()
         
         # Extract subject line
         subject_line = ""

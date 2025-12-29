@@ -1,4 +1,4 @@
-from anthropic import Anthropic
+from openai import OpenAI
 from app.config import settings
 from app.ai.prompts import CRITIC_PROMPT
 import structlog
@@ -16,7 +16,7 @@ def critique_and_refine(
     Second LLM pass to review and refine generated content.
     Validates against style guide and ensures quality.
     """
-    client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    client = OpenAI(api_key=settings.OPENAI_API_KEY)
     
     prompt = CRITIC_PROMPT.format(
         context_analysis=context_analysis,
@@ -28,8 +28,8 @@ def critique_and_refine(
     try:
         logger.info("critiquing_content", platform=platform)
         
-        response = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+        response = client.chat.completions.create(
+            model="gpt-4o",
             max_tokens=3000,
             temperature=0.2,  # Lower temperature for analytical review
             messages=[
@@ -37,7 +37,7 @@ def critique_and_refine(
             ]
         )
         
-        review = response.content[0].text.strip()
+        review = response.choices[0].message.content.strip()
         
         # Parse the verdict
         verdict = "APPROVE"

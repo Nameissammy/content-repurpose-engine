@@ -2,12 +2,12 @@
 
 ![Architecture](architecture.png)
 
-A fully automated system that transforms YouTube videos into platform-specific social media content using AI. The system uses Claude 3.5 Sonnet with LangGraph for intelligent content repurposing, with human-in-the-loop approval before publishing.
+A fully automated system that transforms YouTube videos into platform-specific social media content using AI. The system uses OpenAI GPT-4o with LangGraph for intelligent content repurposing, with human-in-the-loop approval before publishing.
 
 ## Features
 
 ✅ **Automated Content Ingestion** - YouTube video download and transcription
-✅ **AI-Powered Repurposing** - LangGraph state machine with Claude 3.5 Sonnet
+✅ **AI-Powered Repurposing** - LangGraph state machine with OpenAI GPT-4o
 ✅ **Multi-Platform Generation** - Twitter threads, LinkedIn posts, Newsletters
 ✅ **Human Approval Workflow** - Review and edit content before publishing
 ✅ **Automated Publishing** - Direct integration with social media APIs
@@ -45,7 +45,7 @@ A fully automated system that transforms YouTube videos into platform-specific s
 
 - Docker and Docker Compose
 - API Keys:
-  - Anthropic (Claude)
+  - OpenAI
   - Twitter, LinkedIn, Instagram
   - Resend or SendGrid (email)
 
@@ -143,7 +143,7 @@ Key configurations in `.env`:
 
 ```bash
 # AI
-ANTHROPIC_API_KEY=your_key
+OPENAI_API_KEY=your_key
 
 # Features
 ENABLE_AUTO_PUBLISH=false  # Require approval
@@ -200,7 +200,7 @@ alembic upgrade head
 - **Backend**: Python 3.11, FastAPI, SQLAlchemy
 - **Database**: PostgreSQL with pgvector
 - **Cache/Queue**: Redis, Celery
-- **AI**: LangChain, LangGraph, Claude 3.5 Sonnet
+- **AI**: LangChain, LangGraph, OpenAI GPT-4o
 - **Frontend**: React 18, Vite, TanStack Query
 - **Deployment**: Docker, Docker Compose
 
@@ -229,7 +229,7 @@ KEYS celery*
 - Verify yt-dlp is up to date
 
 ### AI generation slow
-- Claude API rate limits
+- OpenAI API rate limits
 - Increase `MAX_CONCURRENT_JOBS`
 
 ### Publishing fails

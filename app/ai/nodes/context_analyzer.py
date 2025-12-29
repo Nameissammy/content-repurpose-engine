@@ -1,4 +1,4 @@
-from anthropic import Anthropic
+from openai import OpenAI
 from app.config import settings
 from app.ai.prompts import CONTEXT_ANALYZER_PROMPT
 import structlog
@@ -11,7 +11,7 @@ def analyze_context(transcript: str, video_metadata: dict = None) -> dict:
     Analyze video transcript to extract key insights and context.
     This is the first node in the LangGraph workflow.
     """
-    client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    client = OpenAI(api_key=settings.OPENAI_API_KEY)
     
     # Build the analysis prompt
     prompt = CONTEXT_ANALYZER_PROMPT.format(transcript=transcript)
@@ -25,8 +25,8 @@ def analyze_context(transcript: str, video_metadata: dict = None) -> dict:
     try:
         logger.info("analyzing_context", transcript_length=len(transcript))
         
-        response = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+        response = client.chat.completions.create(
+            model="gpt-4o",
             max_tokens=2000,
             temperature=0.3,  # Lower temperature for analytical task
             messages=[
@@ -34,7 +34,7 @@ def analyze_context(transcript: str, video_metadata: dict = None) -> dict:
             ]
         )
         
-        analysis = response.content[0].text
+        analysis = response.choices[0].message.content
         
         logger.info("context_analysis_complete", analysis_length=len(analysis))
         

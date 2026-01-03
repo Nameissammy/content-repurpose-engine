@@ -44,3 +44,6 @@ htmlcov/
 # Logs
 *.log
 logs/
+
+# Internal documents
+README_fileDetails.md
